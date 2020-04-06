@@ -107,7 +107,7 @@ class EmbedPlotUi(Ui_MainWindow, QMainWindow):
         self.pushButton_11.clicked.connect(self.grabdetlin)
         self.pushButton_13.clicked.connect(self.loadOSAfile)
         self.pushButton_18.clicked.connect(self.saveOSA)
-        
+        self.pushButton_14.clicked.connect(self.readJSON)
     #################  STD ################  -> 1,2
 
 #%%     fig1    plot for spectra and darks  
@@ -1232,9 +1232,32 @@ class EmbedPlotUi(Ui_MainWindow, QMainWindow):
         CoraClassHell.save(self,"OSA2_{}.jpg",self.canvas10,11)
         CoraClassHell.save(self,"OSA3_{}.jpg",self.canvas11,11)
 
- 
+    def readJSON(self):
+        try:   
+            if self.radioButton_17.isChecked():
+                file=str(QFileDialog.getOpenFileName(self, "Select file"))
+                path=Path(file).parent+"/"
+                
+
+            if self.radioButton_18.isChecked():
+                folder=str(QFileDialog.getExistingDirectory(self, "Select folder"))          
+                path=folder+"/"
+
+            os.chdir(path)
+            
+            self.fileList=glob.glob(".json")
+            
+            for filename in sorted(self.fileList, key=numericalSort):
+                    datei = json.load( open( filename ) )
 
 
+
+
+
+        except Exception as err:
+            tb = sys.exc_info()[2]           
+            print("something went in line:",tb.tb_lineno)  
+            print("Error:",err)
 ######################### 
 #########################        
 app = QApplication([])
